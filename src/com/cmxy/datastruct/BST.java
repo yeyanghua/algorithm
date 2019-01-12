@@ -18,14 +18,14 @@ public class BST<Key extends Comparable<Key>, Value> {
     public int size() {
         return this.count;
     }
-
     public boolean isEmpty() {
         return this.count == 0;
     }
 
+    //递归实现
     public void insert(Key key, Value value) {
         //传入root是因为需要从头开始比较
-        insert(root, key, value);
+        root = insert(root, key, value);
     }
 
     //向以node为根的二叉搜索树中，插入节点(key,value)
@@ -45,9 +45,54 @@ public class BST<Key extends Comparable<Key>, Value> {
         } else {
             node.right = insert(node.right, key, value);
         }
-
         return node;
     }
+
+    public Value search(Key key) {
+        return search(root, key);
+    }
+
+    private Value search(Node node, Key key) {
+        //递归终止条件
+        if (root == null) {
+            return null;
+        }
+        if (node.key.compareTo(key) == 0) {
+            return node.value;
+        } else if (node.key.compareTo(key) > 0) {
+            return search(node.left, key);
+        } else {
+            return search(node.right, key);
+        }
+    }
+
+    //搜索在二叉搜索树中是否含有键值为key的值
+    public boolean contain(Key key) {
+        return contain(root, key);
+    }
+
+    /**
+     * 判断二叉搜索树中是否包含某个Key
+     *
+     * @param node
+     * @param key
+     * @return
+     */
+    private boolean contain(Node node, Key key) {
+        //递归终止条件
+        if (node == null) {
+            return false;
+        }
+        if (node.key.equals(key)) {
+            return true;
+        } else if (node.key.compareTo(key) > 0) {
+            return contain(node.left, key);
+        } else {
+            return contain(node.right, key);
+        }
+
+    }
+
 
     //内部类：节点
     class Node {
@@ -62,5 +107,14 @@ public class BST<Key extends Comparable<Key>, Value> {
             this.left = null;
             this.right = null;
         }
+    }
+
+
+    public static void main(String[] args) {
+        BST bst = new BST();
+        bst.insert(1,"张三");
+        bst.insert(2,"李四");
+        bst.insert(3,"王五");
+        System.out.println(bst.search(3));
     }
 }
